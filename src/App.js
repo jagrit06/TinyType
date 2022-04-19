@@ -202,6 +202,16 @@ class App extends React.Component {
           <li> <p> Clicking space ( _ ) directly adds a space to the text </p></li>
         </ul>
 
+        <b>Inspiration</b>
+        <figure>
+        <img 
+          src="https://miro.medium.com/max/1280/1*zjk7hEfNKdmr_hfkY1KwUA.gif"
+          alt="Nokia multi-tap text input"
+          width="400px"
+        />
+        {"\n"}
+        <figcaption>Image Credit: Anastasiia Ku, medium.com</figcaption>
+        </figure>
       </div>
     );
   }
