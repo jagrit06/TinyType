@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# TinyType
+
+Lab 1 for ECE 188 Spring 2022
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
