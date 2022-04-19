@@ -9,18 +9,30 @@ function Tile(props) {
   );
 }
 
-const defaultTopRow = ["ABCD", "EFGH", "IJKL", "MNOP"];
-const defaultBtmRow = ["QRST", "UVWX", "YZ<", "_"];
+function _defaultBtmRow(isUpper) {
+  if(isUpper) {
+    return ["QRST", "UVWX", "YZ<" + String.fromCharCode(9663), "_"];
+  }
+  return ["qrst", "uvwx", "yz<" + String.fromCharCode(9653), "_"];
+}
+
+function _defaultTopRow(isUpper) {
+  if(isUpper) {
+    return ["ABCD", "EFGH", "IJKL", "MNOP"];
+  }
+  return ["abcd", "efgh", "ijkl", "mnop"];
+}
 
 class InputArea extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      topRow:  defaultTopRow,
-      bottomRow: defaultBtmRow,
+      topRow:  _defaultTopRow(true),
+      bottomRow: _defaultBtmRow(true),
       rowExpanded: -1,
       input  : "",
+      isUpper : true,
     };
   }
 
@@ -29,20 +41,21 @@ class InputArea extends React.Component {
     let topRow = this.state.topRow.slice();
     let bottomRow = this.state.bottomRow.slice();
     let input = this.state.input;
+    let isUpper = this.state.isUpper;
 
     // Click on top row
     if(i < 4){
 
       // If the other row is expanded, send back to default
       if(rowExpanded === 1){
-        bottomRow = defaultBtmRow;
+        bottomRow = _defaultBtmRow(isUpper);
         rowExpanded = -1;
       }
 
       // If this row is expanded, send selection to input
       else if(rowExpanded === 0){
         input += topRow[i];
-        topRow = defaultTopRow;
+        topRow = _defaultTopRow(isUpper);
         rowExpanded = -1;
       }
 
@@ -58,7 +71,7 @@ class InputArea extends React.Component {
 
       // If the other row is expanded, send back to default
       if(rowExpanded === 0){
-        topRow = defaultTopRow;
+        topRow = _defaultTopRow(isUpper);
         rowExpanded = -1;
       }
 
@@ -67,17 +80,30 @@ class InputArea extends React.Component {
         // If delete 
         if(bottomRow[i-4] === '<'){
           input = input.substr(0, input.length-1);
-          bottomRow = defaultBtmRow;
+          bottomRow = _defaultBtmRow(isUpper);
           rowExpanded = -1;
         }
-        // If lowercase
-        else if(bottomRow[i-4] === ''){
 
+        // If to upper case
+        else if(bottomRow[i-4] === String.fromCharCode(9653)){
+          isUpper = true;
+          bottomRow = _defaultBtmRow(isUpper);
+          topRow = _defaultTopRow(isUpper);
+          rowExpanded = -1;
         }
+
+        // If to lower case
+        else if(bottomRow[i-4] === String.fromCharCode(9663)){
+          isUpper = false;
+          bottomRow = _defaultBtmRow(isUpper);
+          topRow = _defaultTopRow(isUpper);
+          rowExpanded = -1;
+        }
+
         // If regular letter
         else{
           input += bottomRow[i-4];
-          bottomRow = defaultBtmRow;
+          bottomRow = _defaultBtmRow(isUpper);
           rowExpanded = -1;
         }
       }
@@ -101,6 +127,7 @@ class InputArea extends React.Component {
       bottomRow: bottomRow,
       rowExpanded: rowExpanded,
       input  : input,
+      isUpper : isUpper
     });
   }
 
@@ -138,17 +165,82 @@ class InputArea extends React.Component {
 }
 
 class App extends React.Component {
+
+  renderTile(i) {
+    return (
+      <Tile
+        value={i}
+        onClick={() => {;}}
+      />
+    );
+  }
+
+  renderInstructions() {
+    return (
+      <div className='instructions'>
+
+        <b>Instructions</b>
+
+        <ol>
+          <li> <p> Click on the box&nbsp;{this.renderTile("ABCD")}&nbsp;containing desired letter</p> </li>
+          <li> <p> Click on the desired letter when the box expands&nbsp;{this.renderTile("A")}{this.renderTile("B")}{this.renderTile("C")}{this.renderTile("D")}&nbsp;</p> </li>
+        </ol>
+
+        <b>Legend</b>
+
+        <ul style={{"list-style-type":"none"}}>
+          <li> <p> _  : Space </p> </li>
+          <li> <p> &#60; : Backspace/Delete </p> </li>
+          <li> <p> {String.fromCharCode(9651)} : Switch to uppercase mode </p> </li>
+          <li> <p> {String.fromCharCode(9661)} : Switch to lowercase mode </p> </li>
+        </ul>
+
+        <b>Note</b>
+
+        <ul>
+          <li> <p> You can click on the other row to collapse an expanded box without adding any text</p></li>
+          <li> <p> Clicking space ( _ ) directly adds a space to the text </p></li>
+        </ul>
+
+      </div>
+    );
+  }
+
+  renderHeading() {
+    return (
+      <div>
+        <h1>TinyType</h1>
+
+        <h3>Jagrit Digani</h3>
+        <h4> <i>705306718</i></h4>
+
+      </div>
+    );
+  }
+
   render() {
     return (
-      <div className="app">
+      <div>
 
-        <div className="input-label">
-          Input:
+        {this.renderHeading()}
+      
+        <div className="app">
+
+          <div className='container'>
+
+            <div className="input-label">
+              <b> Input </b>
+            </div>
+
+            <div className="input-area">
+              <InputArea />
+            </div>
+
+          </div>
+
         </div>
 
-        <div className="input-area">
-          <InputArea />
-        </div>
+        {this.renderInstructions()}
 
       </div>
     );

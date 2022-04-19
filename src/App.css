@@ -14,8 +14,12 @@ ol, ul {
 }
 
 .input {
-  margin-bottom: 10px;
+  margin-top: 2px;
+  margin-bottom: 12px;
+  margin-left: -20px;
+  margin-right: -21px;
   border: thin solid black;
+  text-align: left;
 }
 
 .button {
@@ -32,7 +36,37 @@ ol, ul {
   outline: none;
 }
 
+.container {
+  margin-left: calc(50% - 2cm);
+}
+
 .app {
+  display: flex;
+  flex-direction: row;
+}
+
+.input-label {
+  text-align: center;
+}
+
+.instructions {
+  margin-left: calc(50% - 7.5cm);
+  margin-top: 20px;
+}
+
+h4 {
+  text-align: center;
+}
+
+h3 {
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+p {
   display: flex;
   flex-direction: row;
 }
